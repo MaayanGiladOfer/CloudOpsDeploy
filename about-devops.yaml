@@ -1,5 +1,0 @@
-- hosts: devops
-  become: true
-  roles:
-    - all-about-devops
-
