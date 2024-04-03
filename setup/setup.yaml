@@ -1,7 +1,7 @@
 ---
 
 - name:  Deployment of Kind, Jfrog and Flask app with Ansible playbook
-  hosts: devops
+  hosts: ansible
   collections:
     - kubernetes.core.k8s
   roles:

@@ -1,6 +1,0 @@
-- hosts: devops
-  become: true
-  vars_files:
-    - /home/ansible/ansible/user-group-manage-role/vars/vault.yaml
-  roles:
-    - user-group-manage-role 
