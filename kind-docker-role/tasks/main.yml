@@ -1,0 +1,51 @@
+---
+# tasks file for kind-docker-role
+
+
+# Prechecks:
+
+
+- name: Prechecks
+  include_tasks: precheck.yaml
+  tags:
+    - always
+
+
+# prerequisites:
+
+
+
+- name: prerequisites
+  include_tasks: prerequisites.yaml
+  tags:
+    - install
+
+
+
+# Install kind:
+
+
+
+- name: Install kind
+  include_tasks: install.yaml
+  when: kind_version != kind_installed_version
+  tags:
+    - install
+
+
+# Create cluster
+
+- name: Create cluster {{ cluster_name }}
+  include_tasks: create-cluster.yaml
+  tags:
+    - create
+
+
+
+# Delete cluster
+
+
+- name: Delete cluster {{ cluster_name }}
+  include_tasks: delete-cluster.yaml
+  tags:
+    - delete

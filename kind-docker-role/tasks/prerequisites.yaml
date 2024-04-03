@@ -1,0 +1,50 @@
+---
+
+- name: Add GPG keys
+  rpm_key:
+    key: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - https://download.docker.com/linux/fedora/gpg
+  tags:
+    - install
+
+- name: Add repositories
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    baseurl: "{{ item.baseurl }}"
+    enabled: true
+    gpgcheck: true
+  become: true
+  with_items:
+    - { name: 'docker', description: 'Docker Repository', baseurl: 'https://download.docker.com/linux/fedora/$releasever/$basearch/stable' }
+  tags:
+    - install
+
+
+- name: Install prerequisite Packages
+  ansible.builtin.package:
+    name: "{{ required_packages }}"
+    state: present
+  become: true
+  tags:
+    - install
+
+- name: Install docker-ce
+  ansible.builtin.package:
+    name: "{{ docker_packages }}"
+    state: latest
+  become: true
+  tags:
+    - install
+
+- name: Add docker group to users {{ ansible_user }} groups
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    append: true
+    groups: docker
+  become: true
+  tags:
+    - install

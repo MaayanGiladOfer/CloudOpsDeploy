@@ -1,0 +1,37 @@
+- name: Check if kind already installed into {{ kind_install_dir }}
+  stat:
+    path: "{{ kind_install_dir }}/kind"
+  register: kind_status
+  tags:
+    - always
+
+- name: Check installed kind version
+  shell: "{{ kind_install_dir }}/kind --version | awk -F ' ' '{print \"v\"$3}'"
+  register: kind_installed_version
+  when: kind_status.stat.exists
+  tags:
+    - always
+
+- name: Get latest kind release
+  uri:
+    url: "{{ kind_git }}/releases/latest"
+    return_content: true
+    body_format: json
+  register: kind_latest_release
+  when: kind_version == 'latest'
+  tags:
+    - install
+
+- name: Set version to install
+  set_fact:
+    kind_version: "{{ kind_latest_release.json.tag_name }}"
+  when: kind_version == 'latest'
+  tags:
+    - install
+
+- name: Installation will be skipped
+  debug:
+    msg: "Installation will be skipped, the version {{ kind_version }} specified is already installed!"
+  when: kind_version == kind_installed_version
+  tags:
+    - install

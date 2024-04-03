@@ -1,0 +1,31 @@
+---
+# tasks file for all-about-devops
+- name: Ensure group "webdev" exists
+  ansible.builtin.group:
+    name: webdev
+    state: present
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: /var/www/html
+    dest: /hello1
+    owner: ansible
+    group: webdev
+    state: link
+
+- name: create /hello directory, give ownership to the user, and set permissions
+  ansible.builtin.file:
+    path: /hello1
+    state: directory
+    owner: ansible
+    group: webdev
+    mode: '0755'
+
+
+- name: Create a file named about.html in the /hello directory
+  ansible.builtin.template:
+    src: files/about.html
+    dest: /hello1/about.html
+    mode: '0755'
+  notify: Restart the apache service
+

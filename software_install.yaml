@@ -1,0 +1,22 @@
+---
+
+- name: installing software
+  hosts: devops
+  vars_files:
+    - software_vars.yaml
+  vars:
+    software_group: "@virtualization"
+  tasks:
+
+    - name: installing vim & nmap
+      ansible.builtin.package:
+        name: "{{ software_packages }}"
+        state: present
+
+    - name: Installing "{{ software_group }}" group package
+      ansible.builtin.package:
+        name: "{{ software_group }}"
+        state: present
+
+
+  

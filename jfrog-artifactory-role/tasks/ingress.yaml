@@ -1,0 +1,29 @@
+- name: Copy YAML files to managed hosts
+  copy:
+    src: "/home/ansible/ansible/jfrog-artifactory-role/files/ingress/nginx-ingress"
+    dest: "/tmp/"
+  tags:
+    - install
+
+- name: Apply Kubernetes YAML files
+  command: "kubectl apply -f /tmp/nginx-ingress/crds/"
+  become: true
+  tags:
+    - install
+
+
+- name: Apply helm 
+  command: "helm install nginx-ingress oci://ghcr.io/nginxinc/charts/nginx-ingress --version 1.1.3"
+  become: true
+  tags:
+    - install
+
+
+- name: Add domain to /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "172.18.255.200 jfrog-maayan.octopus.lab app-maayan.octopus.lab"
+    state: present
+  become: true
+  tags:
+    - install

@@ -1,0 +1,38 @@
+---
+
+# tasks file for user-group-manage-role
+
+- name: Verify that admins and users group exist
+  ansible.builtin.group:
+    name: "{{ item }}"
+  loop:
+    - admins
+    - users
+
+
+
+- name: Create users tony, carmela, adds them to group admins
+  ansible.builtin.user:
+    name: "{{ item }}"
+    password: "{{ user_password | password_hash('sha512_crypt') }}"
+    group: admins
+  loop:
+    - tony
+    - carmela
+
+
+- name: Create users david and ben, adds them to group users
+  ansible.builtin.user:
+    name: "{{ item }}"
+    password: "{{ user_password | password_hash('sha512_crypt') }}"
+  loop:
+    - david
+    - ben
+
+
+- name: adds sudo privledges without password to tony
+  ansible.builtin.copy:
+    src: files/tony
+    dest: /etc/sudoers.d/
+    mode: '0755'    
+

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: helloworld
+  namespace: helloworld-ns
+  labels:
+    app: helloworld
+    version: v1
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: helloworld
+
+  template:
+    metadata:
+      labels:
+        app: helloworld
+
+    spec:
+      containers:
+        - name: helloworld
+          image: manofer/helloworld:0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+

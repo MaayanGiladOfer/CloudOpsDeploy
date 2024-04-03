@@ -1,0 +1,25 @@
+---
+- name: Install httpd and firewalld packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+      - httpd
+      - firewalld
+
+
+- name: Ensure httpd and firewalld services is started and enabled
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+      - httpd
+      - firewalld
+
+- name: replace index.html to the directory
+  ansible.builtin.template:
+    src: files/index.html.j2
+    dest: /var/www/html/index.html
+  notify: Restart the apache service
+

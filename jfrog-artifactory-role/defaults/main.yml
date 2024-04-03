@@ -1,0 +1,5 @@
+---
+# defaults file for jfrog-artifactory-role
+jfrog_namespace: artifactory
+jfrog_label_selector: artifactory
+

@@ -1,0 +1,10 @@
+---
+
+- name:  Deployment of Kind, Jfrog and Flask app with Ansible playbook
+  hosts: devops
+  collections:
+    - kubernetes.core.k8s
+  roles:
+    - kind-docker-role
+    - jfrog-artifactory-role
+    - flask-app-role

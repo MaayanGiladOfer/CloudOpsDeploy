@@ -1,0 +1,15 @@
+- name: Check if JFrog is installed in Kubernetes cluster
+  command: kubectl get pods -n helloworld-ns -l app=helloworld
+  register: app_pods
+  ignore_errors: true
+  tags:
+    - always
+
+
+- name: Installation will be skipped
+  debug:
+    msg: "Installation will be skipped, the version jfrog is already running in the cluster!"
+  when: app_pods.stdout_lines | length > 0
+  tags:
+    - always
+

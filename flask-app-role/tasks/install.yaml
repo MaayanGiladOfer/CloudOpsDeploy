@@ -1,0 +1,23 @@
+- name: Copy YAML files to managed hosts
+  copy:
+    src: "/home/ansible/ansible/flask-app-role/files/k8s/{{ item }}"
+    dest: "/tmp/{{ item }}"
+  loop:
+    - namespace.yaml
+    - deployment.yaml
+    - service.yaml
+    - ingress.yaml
+  tags:
+    - install
+
+- name: Apply Kubernetes YAML files
+  command: "kubectl apply -f /tmp/{{ item }}"
+  become: true
+  loop:
+    - namespace.yaml
+    - deployment.yaml
+    - service.yaml
+    - ingress.yaml
+  tags:
+    - install
+

@@ -1,0 +1,28 @@
+- name: Copy YAML files to managed hosts
+  copy:
+    src: "/home/ansible/ansible/jfrog-artifactory-role/files/k8s/{{ item }}"
+    dest: "/tmp/{{ item }}"
+  loop:
+    - jfrog-postgres-ns.yaml
+    - postgres-deployment.yaml
+    - postgres-service.yaml
+    - jfrog-deployment.yaml
+    - pvc.yaml
+    - jfrog-service.yaml
+    - jfrog-ingress.yaml
+  tags:
+    - install
+
+- name: Apply Kubernetes YAML files
+  command: "kubectl apply -f /tmp/{{ item }}"
+  become: true
+  loop:
+    - jfrog-postgres-ns.yaml
+    - postgres-deployment.yaml
+    - postgres-service.yaml
+    - jfrog-deployment.yaml
+    - pvc.yaml
+    - jfrog-service.yaml
+    - jfrog-ingress.yaml
+  tags:
+    - install

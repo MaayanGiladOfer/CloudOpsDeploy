@@ -1,0 +1,36 @@
+- name: Installing Metallb
+  command: "kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.3/config/manifests/metallb-native.yaml"
+  become: true
+  tags:
+    - install
+
+- name: Wait for Metallb pods to be ready
+  shell: |
+    POD_COUNT=$(kubectl get pods -n metallb-system --field-selector=status.phase=Running --no-headers=true | wc -l)
+    if [ "$POD_COUNT" -eq 4 ]; then
+      echo "All 4 MetalLB pods are running"
+    else
+      echo "Expected 4 MetalLB pods to be running, but found $POD_COUNT"
+      exit 1
+    fi
+  register: result
+  until: result.stdout.find("All 4 MetalLB pods are running") != -1
+  retries: 30
+  delay: 10
+  tags:
+    - install    
+
+- name: Copy YAML files to managed hosts
+  copy:
+    src: "/home/ansible/ansible/jfrog-artifactory-role/files/metallb/metallb-config.yaml"
+    dest: "/tmp/metallb-config.yaml"
+  tags:
+    - install
+
+- name: Apply Kubernetes YAML files
+  command: "kubectl apply -f /tmp/metallb-config.yaml"
+  become: true
+  tags:
+    - install
+
+

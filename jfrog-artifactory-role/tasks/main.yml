@@ -1,0 +1,26 @@
+---
+# tasks file for jfrog-artifactory-role
+
+
+
+# prechecks
+
+- name: Prechecks
+  include_tasks: precheck.yaml
+  tags:
+    - always
+
+- name: Metallb deployment
+  include_tasks: metallb.yaml
+  tags:
+    - always
+
+- name: Nginx ingress controller deployment
+  include_tasks: ingress.yaml
+  tags:
+    - always
+
+- name: deploy jfrog in the cluster
+  include_tasks: install.yaml
+  tags: 
+    - install

@@ -1,0 +1,7 @@
+---
+# handlers file for all-about-devops
+- name: Restart the apache service
+  service:
+    name: httpd
+    state: restarted
+

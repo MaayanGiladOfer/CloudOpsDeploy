@@ -1,0 +1,4 @@
+- hosts: devops
+  become: true
+  roles:
+    - apache-role

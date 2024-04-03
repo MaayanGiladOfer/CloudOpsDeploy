@@ -1,0 +1,19 @@
+---
+# tasks file for flask-app-role
+
+
+
+# prechecks
+
+- name: Prechecks
+  include_tasks: precheck.yaml
+  tags:
+    - always
+
+
+- name: deploy flask application
+  include_tasks: install.yaml
+  tags:
+    - always
+
+
